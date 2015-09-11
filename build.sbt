@@ -32,7 +32,7 @@ jsDependencies in Test += RuntimeDOM      // to use PhantomJS for tests
 
 bootSnippet := "showcase.App().main();"    // for the workbench
 
-//updateBrowsers <<= updateBrowsers.triggeredBy(fastOptJS in Compile)
-refreshBrowsers <<= refreshBrowsers.triggeredBy(fastOptJS in Compile)
+updateBrowsers <<= updateBrowsers.triggeredBy(fastOptJS in Compile)
+//refreshBrowsers <<= refreshBrowsers.triggeredBy(fastOptJS in Compile)
 
 EclipseKeys.withSource := true
