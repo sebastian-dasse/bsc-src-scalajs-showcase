@@ -1,10 +1,10 @@
 package showcase
 
-import org.scalajs.dom
+//import org.scalajs.dom
 import org.scalajs.dom.html
 import scalatags.JsDom.TypedTag
 import scalatags.JsDom.all._
-import scalatags.generic.StylePair
+//import scalatags.generic.StylePair
 
 
 object TextBox extends TextBox
@@ -17,13 +17,14 @@ trait TextBox {
   }
   import Defs._
 
-  def box(styles: StylePair[dom.Element, _]*)(xs: Modifier*): TypedTag[html.Div] = div(
+//  def box(styles: StylePair[dom.Element, _]*)(xs: Modifier*): TypedTag[html.Div] = div(
+  def box[T <: Modifier](predefined: T*)(xs: Modifier*): TypedTag[html.Div] = div(
     background:=ColorLightGrey,
     borderRadius:=BorderRadiusDefault,
 //    padding:=Seq(0.5.em, 1.5.em).mkString(" "),
     padding:="0.25em 1.5em",  // top/bottom right/left
     margin:="1.0em 0.0em",    // top/bottom right/left
-    styles,
+    predefined,
     xs
   )
 
