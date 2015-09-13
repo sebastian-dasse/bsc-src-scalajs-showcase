@@ -1,33 +1,24 @@
-package showcase
+package lib.html
 
-//import org.scalajs.dom
 import org.scalajs.dom.html
 import scalatags.JsDom.TypedTag
 import scalatags.JsDom.all._
-//import scalatags.generic.StylePair
+
+import ConvenientDiv.box
+import Defs._
 
 
+/**
+ * Provides convenience methods for CSS-styled textboxes.
+ * - (Available via `import`).
+ */
 object TextBox extends TextBox
 
+/**
+ * Provides convenience methods for CSS-styled textboxes.
+ * - (Available via `extends` or `with`).
+ */
 trait TextBox {
-  private[TextBox] object Defs{
-    val ColorLightGrey = "#F0F0F0"
-    val BorderRadiusDefault = 5.px
-    val BorderCode = "solid 1px #C8C8C8"  // style width color
-  }
-  import Defs._
-
-//  def box(styles: StylePair[dom.Element, _]*)(xs: Modifier*): TypedTag[html.Div] = div(
-  def box[T <: Modifier](predefined: T*)(xs: Modifier*): TypedTag[html.Div] = div(
-    background:=ColorLightGrey,
-    borderRadius:=BorderRadiusDefault,
-//    padding:=Seq(0.5.em, 1.5.em).mkString(" "),
-    padding:="0.25em 1.5em",  // top/bottom right/left
-    margin:="1.0em 0.0em",    // top/bottom right/left
-    predefined,
-    xs
-  )
-
   def importantBox(xs: Modifier*): TypedTag[html.Div] = box(
     border:="solid 2px red", // style width color
     fontSize:=1.25.em

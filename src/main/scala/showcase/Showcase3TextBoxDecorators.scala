@@ -1,20 +1,20 @@
 package showcase
 
-import scala.util.Random
 import org.scalajs.dom
 import org.scalajs.dom.{console, html}
+import scala.util.Random
 import scalatags.JsDom.all._
 
-import lib.html.ConvenientDiv.box
+import lib.html.ConvenientDiv.{box, DDiv}
 import lib.html.DomUtil.replaceChild
 
 
 //import lib.html._
-//object Showcase1TextBoxes extends ConvenientDiv with DomUtil {
-object Showcase2DragAndDrop {
+//object Showcase3TextBoxDecorators extends ConvenientDiv with DomUtil {
+object Showcase3TextBoxDecorators {
   def apply(container: html.Element): Unit = setupUi(container)
 
-  def setupUi(container: html.Element): Unit = {
+  private def setupUi(container: html.Element): Unit = {
     def allowDrop: (dom.DragEvent => Unit) = evt =>
       evt.preventDefault()
 
@@ -54,11 +54,47 @@ object Showcase2DragAndDrop {
       ondragover:=allowDrop
     )(xs)
 
+
+
+
+    //  import lib.html.{DivDecorator => DDiv}
+    //  new TBox("")
+    DDiv("") //.stylez
+
+    val am = DDiv(
+      DDiv(background:="green"),
+      fontFamily:="Arial"
+    )("Awe-some!!")
+
+    val bd1 = DDiv(
+      background:="#F0F0F0",
+      borderRadius:=5.px,
+      padding:="0.5% 3%",   // top/bottom right/left
+      margin:="1.0em 0.0em" // top/bottom right/left
+    )
+    val bd2 = DDiv(fontSize:=3.em)
+    val bd3 = DDiv(bd1, fontSize:=3.em)
+
+
     container.appendChild(
       div(
         maxWidth:=1000.px,
         margin:="auto",
-        h1("Scala.js Showcase 2"),
+        h1("Scala.js Showcase 3"),
+        div(
+          am,
+          DDiv(
+            DDiv(background:="green"),
+            fontFamily:="Arial"
+          )("G-reat!!"),
+          bd1.apply("Exactly!!!"),
+          bd2.apply("Exactly!!!"),
+          bd3.apply("Exactly!!!")
+        //          sb
+//          fff("hello 1"),
+//          Foo(background:="green", color:="yellow")("hello 2")
+
+        ),
         div(
           invisibleBox(
             draggableBox("d1")(

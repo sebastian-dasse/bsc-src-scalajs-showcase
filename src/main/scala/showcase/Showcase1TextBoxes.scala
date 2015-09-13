@@ -3,9 +3,12 @@ package showcase
 import org.scalajs.dom.html
 import scalatags.JsDom.all._
 
-import showcase.TextBox._
+import lib.html.ConvenientDiv.box
+import lib.html.TextBox._
 
 
+//import lib.html._
+//object Showcase1TextBoxes extends TextBox with ConvenientDiv {
 object Showcase1TextBoxes {
   def apply(container: html.Element): Unit = setupUi(container)
 

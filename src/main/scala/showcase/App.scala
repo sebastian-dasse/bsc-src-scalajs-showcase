@@ -2,11 +2,12 @@ package showcase
 
 import scalajs.js.annotation.JSExport
 
-import showcase.Util._
+import lib.html.DomUtil.getContainer
 
 
 @JSExport
-object App /*extends MyBox*/ {
+//object App extends lib.html.DomUtil {
+object App {
 
   @JSExport
   def main(): Unit = {
@@ -15,6 +16,7 @@ object App /*extends MyBox*/ {
     val container = getContainer()
     container.innerHTML = ""
 //    Showcase1TextBoxes(container)
-    Showcase2DragAndDrop(container)
+//    Showcase2DragAndDrop(container) // TODO use a proper data model
+    Showcase3TextBoxDecorators(container)
   }
 }
