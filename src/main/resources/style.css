@@ -1,0 +1,23 @@
+/*
+created using:
+- http://www.w3schools.com/tags/ref_colorpicker.asp
+(- http://www.colorzilla.com/gradient-editor/)
+*/
+
+body {
+  background: rgb(246, 248, 250);
+}
+
+.btn {
+  color: rgb(0, 51, 204);
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  font-size: 1.5em;
+  border-radius: 5px;
+  border-style: hidden;
+  padding: 0.25em 0.75em;
+  margin: 10px 5px;
+
+  background: rgb(212, 220, 230);
+
+}
