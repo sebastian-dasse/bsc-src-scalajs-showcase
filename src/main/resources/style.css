@@ -12,6 +12,14 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+input[type=text] {
+  padding: 0 10px;
+}
+
+textarea {
+  padding: 10px;
+}
+
 .my-btn {
   background: rgb(212, 220, 230);
   color: rgb(0, 51, 204);
@@ -21,6 +29,7 @@ body {
   border-style: hidden;
   padding: 0.25em 0.75em;
   margin: 10px 5px;
+  cursor: pointer;
 }
 
 .input-btn {
@@ -31,6 +40,7 @@ body {
   border: 1px solid rgb(0, 51, 204);
   padding: 0.25em 0.75em;
   /*margin: 10px 5px;*/
+  cursor: pointer;
 }
 
 table {
@@ -53,6 +63,10 @@ table thead tr {
 
 table.my-tbl-sortable thead tr {
   cursor: pointer;
+}
+
+table.my-tbl-sortable thead tr :hover {
+  color: rgb(255, 0, 102);
 }
 
 table.my-tbl-sortable td:nth-child(1) {

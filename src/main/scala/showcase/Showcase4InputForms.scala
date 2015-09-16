@@ -18,13 +18,14 @@ object Showcase4InputForms {
     val defaultCanvasHeight = 150
 
     val colCanvasBar = Color(  0,  51, 204) // dark blue
-    val colFlash     = Color(230, 230, 230) // light grey
+    val colFlash     = Color(242, 242, 242) // light grey
 
     implicit def color2JsAny(col: Color): js.Any = col.toString
 
 
     val txtInput = input(
       id:="txt-input",
+      tpe:="text",
       onfocus:={ (ev: dom.MouseEvent) => () },
       placeholder:="Your input here..."
     ).render
@@ -52,20 +53,40 @@ object Showcase4InputForms {
     def freqChars = {
       val chs = txtOutput.value.toSeq.filter(!_.isWhitespace).map(_.toLower)
       chs.foldLeft(scala.collection.mutable.Map[Char, Int]())(
-        (chFreqs, ch) => { chFreqs +=(ch -> (chFreqs.getOrElse(ch, 0) + 1)) }
+        (chFreqs, ch) => { chFreqs += (ch -> (chFreqs.getOrElse(ch, 0) + 1)) }
       ).toSeq
     }
 
-    type Comparison = (Tuple2[Char, Int], Tuple2[Char, Int]) => Boolean
-    sealed trait Order { def apply: Comparison }
-    case object CharsAsc  extends Order { def apply = _._1 < _._1  }
-    case object CharsDesc extends Order { def apply = _._1 > _._1 }
-    case object FreqAsc   extends Order { def apply = _._2 < _._2 }
-    case object FreqDesc  extends Order { def apply = _._2 > _._2 }
+    sealed trait MyOrdering extends Ordering[(Char, Int)]
+    case object CharsAsc extends MyOrdering {
+      override def compare(x: (Char, Int), y: (Char, Int)) = x._1 compare y._1
+    }
+    case object CharsDesc extends MyOrdering {
+      override def compare(x: (Char, Int), y: (Char, Int)) = y._1 compare x._1
+    }
+    case object FreqAsc extends MyOrdering {
+      override def compare(x: (Char, Int), y: (Char, Int)) = x._2 compare y._2
+    }
+    case object FreqDesc extends MyOrdering {
+      override def compare(x: (Char, Int), y: (Char, Int)) = y._2 compare x._2
+    }
 
-    def freqCharsSortedBy(order: Order) = freqChars.sortWith(order.apply)
+//    def freqCharsSortedBy(order: Order) = {
+//      def Desc[T : Ordering] = implicitly[Ordering[T]].reverse
+//      order match {
+//        case CharsAsc => freqChars.sortBy(_._1)
+//        case CharsDesc => freqChars.sortBy(_._1)(Desc)
+//        case FreqAsc => freqChars.sortBy(_._2)
+//        case FreqAsc => freqChars.sortBy(_._2)(Desc)
+//      }
+//    }
 
-    var tableOrdering: Order = CharsAsc
+//    def freqCharsSortedBy(order: Order) = freqChars.sortWith(order.apply)
+    def freqCharsSortedBy(order: MyOrdering) = freqChars.sorted(order)
+
+
+//    var tableOrdering: Order = CharsAsc
+    var tableOrdering: MyOrdering = CharsAsc
 
     def freqCharsSorted = freqCharsSortedBy(tableOrdering)
 
@@ -183,7 +204,7 @@ object Showcase4InputForms {
           ),
           th("Frequency",
             onclick:={ () => {
-              tableOrdering = if (tableOrdering == FreqAsc) FreqDesc else FreqAsc
+              tableOrdering = if (tableOrdering == FreqDesc) FreqAsc else FreqDesc
               updateAnalysisOutput()
             } }
           )
