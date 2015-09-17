@@ -10,11 +10,9 @@ import lib.html.DomUtil.replaceChild
 
 
 //import lib.html._
-//object Showcase3TextBoxDecorators extends ConvenientDiv with DomUtil {
-object Showcase3TextBoxDecorators {
-  def apply(container: html.Element): Unit = setupUi(container)
-
-  private def setupUi(container: html.Element): Unit = {
+//object Showcase3TextBoxDecorators extends Showcase with ConvenientDiv with DomUtil {
+object Showcase3TextBoxDecorators extends Showcase {
+  def setupUi(container: html.Element): Unit = {
     def allowDrop: (dom.DragEvent => Unit) = evt =>
       evt.preventDefault()
 

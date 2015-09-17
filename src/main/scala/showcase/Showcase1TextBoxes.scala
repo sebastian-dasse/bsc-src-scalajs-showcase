@@ -8,11 +8,9 @@ import lib.html.TextBox._
 
 
 //import lib.html._
-//object Showcase1TextBoxes extends TextBox with ConvenientDiv {
-object Showcase1TextBoxes {
-  def apply(container: html.Element): Unit = setupUi(container)
-
-  private def setupUi(container: html.Element): Unit = {
+//object Showcase1TextBoxes extends Showcase with TextBox with ConvenientDiv {
+object Showcase1TextBoxes extends Showcase {
+  def setupUi(container: html.Element): Unit = {
     container.appendChild(
       div(
         maxWidth:=1000.px,

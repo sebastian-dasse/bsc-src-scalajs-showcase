@@ -10,10 +10,8 @@ import lib.html.DomUtil.replaceChild
 
 
 //import lib.html._
-//object Showcase1TextBoxes extends ConvenientDiv with DomUtil {
-object Showcase2DragAndDrop {
-  def apply(container: html.Element): Unit = setupUi(container)
-
+//object Showcase1TextBoxes extends Showcase with ConvenientDiv with DomUtil {
+object Showcase2DragAndDrop extends Showcase {
   def setupUi(container: html.Element): Unit = {
     def allowDrop: (dom.DragEvent => Unit) = evt =>
       evt.preventDefault()

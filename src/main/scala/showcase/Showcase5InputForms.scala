@@ -8,11 +8,9 @@ import scala.scalajs.js
 import scalatags.JsDom.all._
 import scala.language.implicitConversions
 
-// TODO refactor
-object Showcase4InputForms {
-  def apply(container: html.Element): Unit = setupUi(container)
 
-
+// TODO: ok to have it all in one file or refactor?
+object Showcase5InputForms extends Showcase {
   def setupUi(container: html.Element): Unit = {
 
     val defaultCanvasHeight = 150
@@ -30,13 +28,7 @@ object Showcase4InputForms {
       placeholder:="Your input here..."
     ).render
 
-    val txtOutput = textarea(
-      id:="txt-output",
-//      cols:=30,
-      rows:=10,
-      readonly//,
-//      style:="resize:none"
-    ).render
+    val txtOutput = textarea(id:="txt-output").render
 
     def numLines =
       if (txtOutput.value.isEmpty) 0
@@ -57,36 +49,23 @@ object Showcase4InputForms {
       ).toSeq
     }
 
-    sealed trait MyOrdering extends Ordering[(Char, Int)]
-    case object CharsAsc extends MyOrdering {
+    sealed trait TableOrdering extends Ordering[(Char, Int)]
+    case object CharsAsc extends TableOrdering {
       override def compare(x: (Char, Int), y: (Char, Int)) = x._1 compare y._1
     }
-    case object CharsDesc extends MyOrdering {
+    case object CharsDesc extends TableOrdering {
       override def compare(x: (Char, Int), y: (Char, Int)) = y._1 compare x._1
     }
-    case object FreqAsc extends MyOrdering {
+    case object FreqAsc extends TableOrdering {
       override def compare(x: (Char, Int), y: (Char, Int)) = x._2 compare y._2
     }
-    case object FreqDesc extends MyOrdering {
+    case object FreqDesc extends TableOrdering {
       override def compare(x: (Char, Int), y: (Char, Int)) = y._2 compare x._2
     }
 
-//    def freqCharsSortedBy(order: Order) = {
-//      def Desc[T : Ordering] = implicitly[Ordering[T]].reverse
-//      order match {
-//        case CharsAsc => freqChars.sortBy(_._1)
-//        case CharsDesc => freqChars.sortBy(_._1)(Desc)
-//        case FreqAsc => freqChars.sortBy(_._2)
-//        case FreqAsc => freqChars.sortBy(_._2)(Desc)
-//      }
-//    }
+    def freqCharsSortedBy(order: TableOrdering) = freqChars.sorted(order)
 
-//    def freqCharsSortedBy(order: Order) = freqChars.sortWith(order.apply)
-    def freqCharsSortedBy(order: MyOrdering) = freqChars.sorted(order)
-
-
-//    var tableOrdering: Order = CharsAsc
-    var tableOrdering: MyOrdering = CharsAsc
+    var tableOrdering: TableOrdering = CharsAsc
 
     def freqCharsSorted = freqCharsSortedBy(tableOrdering)
 
@@ -214,38 +193,11 @@ object Showcase4InputForms {
       lettersFreq
     )
 
-
-//    val exampleMap = Map(
-//      "Alice" -> "Alaska",
-//      "Bob" -> "Brunei",
-//      "Carla" -> "Costa Rica"
-//    )
-
-
     container.appendChild(
-      div(id:="container-toplevel",
-        div(
-          button(
-            id:="btn-foo",
-//            `class`:="btn",
-            cls:="my-btn",
-            "Foo",
-            onclick:={ (ev: dom.MouseEvent) => { console.log("foo clicked!", ev)} }
-          ),
-          input(
-            id:="btn-bar",
-            cls:="my-btn",
-//            `type`:="button",
-            tpe:="button",
-            value:="Bar",
-            onclick:={ () => {
-              println("bar clicked!!!")
-              dom.alert("foo")
-            } }
-          )
-        ),
+      div(
+        id:="container-toplevel",
 
-        hr,
+        h1("A Simple Text Analyzer"),
 
         div(
           id:="container-input",
@@ -278,12 +230,17 @@ object Showcase4InputForms {
         div(
           id:="container-analysis",
           div(id:="container-anaylsis-text",
-            p("lines: ", linesCount),
-            p("words: ", wordsCount),
-            p("letters: ", lettersCount),
-            p("characters: ", charsCount)
+            table(id:="tbl-text",
+              tbody(
+                tr(
+                  th("lines:"), td(linesCount),
+                  th("words:"), td(wordsCount),
+                  th("letters:"), td(lettersCount),
+                  th("characters:"), td(charsCount)
+                )
+              )
+            )
           ),
-
           div(
             id:="container-analysis-letters",
             theTable,
@@ -293,18 +250,6 @@ object Showcase4InputForms {
             )
           )
         )
-
-//        ,
-//        hr,
-//
-//        div(
-//          id:="list-example",
-//          ul(
-//            (for {(name, destination) <- exampleMap} yield li(
-//              b(name), s" wants to travel to $destination"
-//            )).toSeq
-//          )
-//        )
       ).render
     )
   }

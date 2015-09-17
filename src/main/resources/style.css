@@ -12,12 +12,42 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: rgb(0, 51, 204);
+}
+
 input[type=text] {
   padding: 0 10px;
 }
 
 textarea {
   padding: 10px;
+}
+
+.my-form {
+  background: white;
+  border: 1px solid lightgrey;
+  padding: 1px 20px;
+  margin: 10px 0;
+}
+
+.my-form h1, h2, h3, h4, h5, h6 {
+  /*color: rgb(212, 220, 230);*/
+}
+
+.my-form button {
+  color: red;
+  margin: 0;
+
+  /*color: rgb(212, 220, 230);*/
+  /*background: rgb(0, 51, 204);*/
+  /*font-weight: 800;*/
+  /*font-size: 1.5em;*/
+  /*border-radius: 5px;*/
+  /*border-style: hidden;*/
+  /*padding: 0.25em 0.75em;*/
+  /*margin: 10px 5px;*/
+  /*cursor: pointer;*/
 }
 
 .my-btn {
@@ -48,8 +78,8 @@ table {
   padding: 0.25em;
 }
 
-td {
-  padding: 0.5em;
+th, td {
+  padding: 5px;
 }
 
 table tbody, tfoot tr {
@@ -67,14 +97,6 @@ table.my-tbl-sortable thead tr {
 
 table.my-tbl-sortable thead tr :hover {
   color: rgb(255, 0, 102);
-}
-
-table.my-tbl-sortable td:nth-child(1) {
-  text-align: center;
-}
-
-table.my-tbl-sortable td:nth-child(2) {
-  text-align: right;
 }
 
 tfoot {
@@ -105,11 +127,12 @@ tfoot {
   margin: 10px 0;
 }
 
-#txt-output {
+textarea#txt-output {
   flex-grow: 1;
   font-size: 1em;
   font-family: Helvetica, Arial, sans-serif;
   resize: none;
+  height: 10em;
 }
 
 #btn-clear {
@@ -118,11 +141,23 @@ tfoot {
 
 #container-analysis {
   background: rgb(242, 242, 242);
+  /*display: flex;*/
+  /*flex-direction: row;*/
   font-size: 0.8em;
+  padding: 10px;
 }
 
 #container-anaylsis-text {
-  margin: 0 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#tbl-text {
+  width: inherit;
+}
+
+#tbl-text td {
+  text-align: right;
 }
 
 #container-analysis-letters {
@@ -130,8 +165,13 @@ tfoot {
   flex-direction: row;
 }
 
-/*#tbl-letters {*/
-/*}*/
+#tbl-letters td:nth-child(1) {
+  text-align: center;
+}
+
+#tbl-letters td:nth-child(2) {
+  text-align: right;
+}
 
 #container-letters-diagram {
   background: white;

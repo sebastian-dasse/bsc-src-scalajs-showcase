@@ -1,9 +1,18 @@
 package showcase
 
+import org.scalajs.dom.html
+
 import scalajs.js.annotation.JSExport
 
 import lib.html.DomUtil.getContainer
 
+trait Showcase {
+  def setupUi(container: html.Element): Unit
+  def apply(container: html.Element): Unit = {
+    container.innerHTML = ""
+    setupUi(container)
+  }
+}
 
 @JSExport
 //object App extends lib.html.DomUtil {
@@ -34,14 +43,17 @@ object App {
 
   @JSExport
   def main(): Unit = {
-    println("Hello world!")
 //    foo()
 
     val container = getContainer()
-    container.innerHTML = ""
+
 //    Showcase1TextBoxes(container)
 //    Showcase2DragAndDrop(container) // TODO use a proper data model
 //    Showcase3TextBoxDecorators(container)
-    Showcase4InputForms(container)
+    example4.Showcase4InputForms(container)
+//    Showcase5InputForms(container)
+//    Showcase6Ajax(container)
+
+    println("UI was set up.")
   }
 }
