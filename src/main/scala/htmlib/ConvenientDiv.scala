@@ -1,4 +1,4 @@
-package lib.html
+package htmlib
 
 import org.scalajs.dom.html
 import scalatags.JsDom.TypedTag
@@ -30,14 +30,14 @@ trait ConvenientDiv {
   )
 
 
-  private[html] trait DivBase {
-    protected[html] def stylez: Seq[Modifier]
+  private[htmlib] trait DivBase {
+    protected[htmlib] def stylez: Seq[Modifier]
     def apply(contents: Modifier*): TypedTag[html.Div] = div(stylez, contents)
   }
 
-  private[html] class DivDecorator(decorated: DivBase, styles: Modifier*) extends DivBase {
+  private[htmlib] class DivDecorator(decorated: DivBase, styles: Modifier*) extends DivBase {
     def this(styles: Modifier*) = this( new DivBase{ override def stylez = styles } )
-    override protected[html] def stylez: Seq[Modifier] = decorated.stylez ++ styles
+    override protected[htmlib] def stylez: Seq[Modifier] = decorated.stylez ++ styles
   }
 
   val DDiv = DivDecorator

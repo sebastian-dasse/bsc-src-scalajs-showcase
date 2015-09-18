@@ -3,8 +3,8 @@ package showcase
 import org.scalajs.dom.html
 import scalatags.JsDom.all._
 
-import lib.html.ConvenientDiv.box
-import lib.html.TextBox._
+import htmlib.ConvenientDiv._
+import htmlib.TextBox._
 
 
 //import lib.html._

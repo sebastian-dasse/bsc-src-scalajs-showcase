@@ -1,10 +1,10 @@
 package showcase
 
 import org.scalajs.dom.html
-
 import scalajs.js.annotation.JSExport
 
-import lib.html.DomUtil.getContainer
+import htmlib.DomUtil._
+
 
 trait Showcase {
   def setupUi(container: html.Element): Unit
@@ -50,7 +50,8 @@ object App {
 //    Showcase1TextBoxes(container)
 //    Showcase2DragAndDrop(container) // TODO use a proper data model
 //    Showcase3TextBoxDecorators(container)
-    example4.Showcase4InputForms(container)
+//    example4.Showcase4Layout(container)
+    example4.Showcase5Layout(container)
 //    Showcase5InputForms(container)
 //    Showcase6Ajax(container)
 

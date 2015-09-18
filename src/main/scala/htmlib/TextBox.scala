@@ -1,4 +1,4 @@
-package lib.html
+package htmlib
 
 import org.scalajs.dom.html
 import scalatags.JsDom.TypedTag

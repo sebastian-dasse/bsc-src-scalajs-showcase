@@ -24,31 +24,6 @@ textarea {
   padding: 10px;
 }
 
-.my-form {
-  background: white;
-  border: 1px solid lightgrey;
-  padding: 1px 20px;
-  margin: 10px 0;
-}
-
-.my-form h1, h2, h3, h4, h5, h6 {
-  /*color: rgb(212, 220, 230);*/
-}
-
-.my-form button {
-  color: red;
-  margin: 0;
-
-  /*color: rgb(212, 220, 230);*/
-  /*background: rgb(0, 51, 204);*/
-  /*font-weight: 800;*/
-  /*font-size: 1.5em;*/
-  /*border-radius: 5px;*/
-  /*border-style: hidden;*/
-  /*padding: 0.25em 0.75em;*/
-  /*margin: 10px 5px;*/
-  /*cursor: pointer;*/
-}
 
 .my-btn {
   background: rgb(212, 220, 230);
@@ -58,8 +33,44 @@ textarea {
   border-radius: 5px;
   border-style: hidden;
   padding: 0.25em 0.75em;
-  margin: 10px 5px;
+  margin: 0px 5px;
   cursor: pointer;
+}
+
+.my-btn:focus {
+  outline: none;
+}
+
+.my-btn:active {
+  background: rgb(191, 198, 207);
+}
+
+.my-form {
+  background: white;
+  border: 1px solid lightgrey;
+  padding: 1px 20px;
+  margin: 10px 0;
+}
+
+.my-form button {
+  color: red;
+  margin: 0;
+}
+
+.rotated {
+  transform: rotate(2.5deg);
+}
+
+.onhover-rotate:hover {
+  transform: rotate(2.5deg);
+}
+
+.onhover-grow:hover {
+  transform: scale(1.005, 1.005);
+}
+
+.onhover-shrink:hover {
+  transform: scale(0.98, 0.98);
 }
 
 .input-btn {

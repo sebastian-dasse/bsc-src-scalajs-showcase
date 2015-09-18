@@ -5,8 +5,8 @@ import org.scalajs.dom
 import org.scalajs.dom.{console, html}
 import scalatags.JsDom.all._
 
-import lib.html.ConvenientDiv.box
-import lib.html.DomUtil.replaceChild
+import htmlib.ConvenientDiv._
+import htmlib.DomUtil._
 
 
 //import lib.html._
@@ -25,7 +25,7 @@ object Showcase2DragAndDrop extends Showcase {
       case tgtContainer: html.Div =>
         evt.preventDefault()
         val srcElmId = evt.dataTransfer.getData("text")
-        replaceChild(srcElmId, tgtContainer)
+        replaceChild(tgtContainer, srcElmId)
     }
 
     def clickDebug = (ev: dom.MouseEvent) => ev.currentTarget match {

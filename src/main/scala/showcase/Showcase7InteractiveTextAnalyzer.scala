@@ -10,7 +10,7 @@ import scala.language.implicitConversions
 
 
 // TODO: ok to have it all in one file or refactor?
-object Showcase5InputForms extends Showcase {
+object Showcase7InteractiveTextAnalyzer extends Showcase {
   def setupUi(container: html.Element): Unit = {
 
     val defaultCanvasHeight = 150

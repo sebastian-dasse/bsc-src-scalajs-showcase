@@ -3,7 +3,7 @@ package showcase
 import org.scalajs.dom.html
 import scalatags.JsDom.all._
 
-object Showcase6Ajax extends Showcase {
+object Showcase8Ajax extends Showcase {
   def setupUi(container: html.Element): Unit = {
     container.appendChild(
       div(
