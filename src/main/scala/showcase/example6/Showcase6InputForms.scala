@@ -1,4 +1,4 @@
-package showcase.example4
+package showcase.example6
 
 import org.scalajs.dom
 import org.scalajs.dom.{console, html}
@@ -8,34 +8,10 @@ import scalatags.JsDom.tags2._
 import showcase.Showcase
 
 
+// TODO: some form examples, a pseudo-login ...
+
 object Showcase6InputForms extends Showcase {
   def setupUi(container: html.Element): Unit = {
-
-    // TODO: some form examples, a pseudo-login ...
-
-    div()
-
-    def form1(theId: String,
-              classes: Seq[String] = Nil,
-              title: String = "",
-              buttonText: String = "Button",
-              btnOnclick: (dom.MouseEvent) => Unit,
-              text: String) =
-      div(
-        id:=theId,
-        cls:="my-form " + classes.mkString(" "),
-        if (!title.isEmpty) h3(title) else "",
-        p(text),
-        p(
-          button(
-            id:="btn-" + id,
-            cls:="my-btn onhover-shrink",
-            buttonText,
-            onclick:=btnOnclick
-          )
-        )
-      )
-
     container.appendChild(
       div(
         h1("Scala.js Showcase 4"),
@@ -136,4 +112,25 @@ object Showcase6InputForms extends Showcase {
       ).render
     )
   }
+
+  def form1(theId: String,
+            classes: Seq[String] = Nil,
+            title: String = "",
+            buttonText: String = "Button",
+            btnOnclick: (dom.MouseEvent) => Unit,
+            text: String) =
+    div(
+      id:=theId,
+      cls:="my-form " + classes.mkString(" "),
+      if (!title.isEmpty) h3(title) else "",
+      p(text),
+      p(
+        button(
+          id:="btn-" + id,
+          cls:="my-btn onhover-shrink",
+          buttonText,
+          onclick:=btnOnclick
+        )
+      )
+    )
 }

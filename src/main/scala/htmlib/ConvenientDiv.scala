@@ -40,6 +40,7 @@ trait ConvenientDiv {
     override protected[htmlib] def stylez: Seq[Modifier] = decorated.stylez ++ styles
   }
 
+  // just a shortcut name
   val DDiv = DivDecorator
 
   object DivDecorator {

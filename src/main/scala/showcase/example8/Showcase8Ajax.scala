@@ -1,7 +1,9 @@
-package showcase
+package showcase.example8
 
 import org.scalajs.dom.html
 import scalatags.JsDom.all._
+
+import showcase.Showcase
 
 object Showcase8Ajax extends Showcase {
   def setupUi(container: html.Element): Unit = {

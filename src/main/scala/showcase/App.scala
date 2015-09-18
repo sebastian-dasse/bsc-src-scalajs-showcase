@@ -1,6 +1,7 @@
 package showcase
 
 import org.scalajs.dom.html
+import showcase.example7.Showcase7InteractiveTextAnalyzer
 import scalajs.js.annotation.JSExport
 
 import htmlib.DomUtil._
@@ -47,13 +48,52 @@ object App {
 
     val container = getContainer()
 
+    // TODO
+    // - refactor to correct packages
+    // - extract lib functions etc.
+    // - add central navigation to the several showcases as sub-pages
+
 //    Showcase1TextBoxes(container)
 //    Showcase2DragAndDrop(container) // TODO use a proper data model
 //    Showcase3TextBoxDecorators(container)
-//    example4.Showcase4Layout(container)
-    example4.Showcase5Layout(container)
-//    Showcase5InputForms(container)
-//    Showcase6Ajax(container)
+//    Showcase4Layout(container)
+//    Showcase5Layout(container) // TODO continue here -> clean up, extract methods out of setupUi
+//    Showcase6InputForms(container) // TODO add login example and bigger form, maybe
+    Showcase7InteractiveTextAnalyzer(container) // could be extended and improved (see below)
+//    Showcase8Ajax(container) // not implemented
+
+    /* TODO
+     * - use the canvas frenzy-example -> playground
+     * - login UI and a more complex form
+     * - a simple blog
+     * - maybe inheritance
+     * - autocomplete
+     * - an advanced drag-and-drop-example -> maybe a blog
+     *   - with a data model for the containers
+     *   - with nice containers like in Showcase6InputForms
+     * - autocomplete, with Rx
+     * - AJAX, with Futures, Async  -->  WeatherSearch, as in Hands-on Scala.js, or if possible finance API for currency conversion
+     * - JavaScript-interop (in separate hello-interop project?)  -->  reuse what is already prepared in playground
+     *   - export Scala.js to JavaScript
+     *     - just the usual @JSExport (like used in the main, see above)
+     *     - use cross-compiling statistics-lib in JavaScript
+     *  - import JavaScript into Scala.js
+     *    - as done all the time with the facades from Scala.js, ScalaTags, ...
+     *    - own JavaScript example-code
+     * - Rx / Async for control flow with clicks -> sketchpad or something similar
+     * - Server/Client with routing with Spray and Autowire  -->  reuse what was tested in preparation and maybe use it with this webpage here
+     * - cross-compile example to test semantic differences (could be called hello-semantic-differences)
+     *
+     * - possible TextAnalyzer improvements
+     *   - make text searchable -> highlight found locations  -->  Hands-on Scala.js
+     *   - diagram for word count
+     *   - toggle between letter count und word count
+     *   - use functions from statistics library
+     *   - use Rx or Async for better interactivity
+     *   - import text
+     *     - via multi-line paste
+     *     - via file upload
+     */
 
     println("UI was set up.")
   }

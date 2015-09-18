@@ -1,22 +1,22 @@
 package showcase.example4
 
 import org.scalajs.dom
-import org.scalajs.dom.{console, document, html => sjs_html}
-import showcase.Showcase
+/* To avoid name clash with scalatags.JsDom.tags2.html. More explicit imports
+ * would be an alternative, i.e.: scalatags.JsDom.tags2.{article, nav} */
+import org.scalajs.dom.{console, html => sjs_html}
 
 /* possibliy clutters namespace */
 //import scalatags.JsDom.all._
 
 /* imports almost the same as 'scalatags.JsDom.all._', but
-    - attrs and styles have to be prefixed with '*.'
-    - 'scalatags.JsDom.tags._' has to be imported explicitly
-*/
+ *  - attrs and styles have to be prefixed with '*.'
+ *  - 'scalatags.JsDom.tags._' has to be imported explicitly
+ */
 import scalatags.JsDom.short._
 import scalatags.JsDom.tags._
 import scalatags.JsDom.tags2._
 
-//import scalatags.JsDom.styles
-//import scalatags.JsDom.styles2
+import showcase.Showcase
 
 
 object Showcase4Layout extends Showcase {
@@ -55,7 +55,6 @@ object Showcase4Layout extends Showcase {
             *.onclick:={ () => {
               println("eggs clicked!!!")
               theImg.classList.toggle("rotated")
-//              dom.alert("foo")
             } }
           )
         ),
@@ -66,8 +65,6 @@ object Showcase4Layout extends Showcase {
           *.id:="article-black-turnstone",
 
           header(h3("The black turnstone")),
-
-//          img(*.src:="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/ArenariaMelanocephala_3864.jpg/318px-ArenariaMelanocephala_3864.jpg", *.cls:="onhover-rotate"),
             theImg,
 
           p(b("Black turnstone - "), em("Arenaria melanocephala")),

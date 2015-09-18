@@ -1,13 +1,13 @@
-package showcase.example4
+package showcase.example5
 
 import org.scalajs.dom
-import org.scalajs.dom.{console, html}
+import org.scalajs.dom.html
 import scala.language.implicitConversions
 
 /* it's rather hard to get these imports right! */
-import scalatags.JsDom.all._
-import scalatags.JsDom.tags2.{article, nav}
 import scalatags.JsDom.TypedTag
+import scalatags.JsDom.all._
+import scalatags.JsDom.tags2.nav
 
 import htmlib.DomUtil._
 import showcase.Showcase
@@ -52,11 +52,8 @@ object Showcase5Layout extends Showcase {
     }
 //    case class MyImage(name: String, image: html.Image, caption: String = "") {
     case class MyImage(name: String, image: TypedTag[html.Image], caption: String = "") {
-      import MyImage._
 //      require(hasValidName(image))
     }
-
-    import MyImage._
 
 
     /// either explicitly ...
