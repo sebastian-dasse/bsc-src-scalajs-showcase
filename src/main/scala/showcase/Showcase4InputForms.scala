@@ -1,57 +1,73 @@
-package showcase.example7
+package showcase
 
 import org.scalajs.dom
-import org.scalajs.dom.ext.{Color, KeyCode}
+import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom.ext.Color
 import org.scalajs.dom.{console, html}
-
-import scala.language.implicitConversions
 import scala.scalajs.js
 import scalatags.JsDom.all._
+import scala.language.implicitConversions
 
-import showcase.Showcase
-import showcase.example7.TableOrdering._
-import showcase.example7.{StringAnalysis => analyze}
+// TODO refactor
+object Showcase4InputForms {
+  def apply(container: html.Element): Unit = setupUi(container)
 
-
-/* Note: the word analyzer ignores non-UTF characters such as German umlauts etc. But the letter */
-object Showcase7InteractiveTextAnalyzer extends Showcase {
-
-  object Settings {
-    val defaultCanvasHeight = 150
-
-    val colCanvasBar  = Color(  0,  51, 204) // dark blue
-    val colColorFlash = Color(242, 242, 242) // light grey
-
-    implicit def color2JsAny(col: Color): js.Any = col.toString
-  }
 
   def setupUi(container: html.Element): Unit = {
-    import Settings._
+
+    val defaultCanvasHeight = 150
+
+    val colCanvasBar = Color(  0,  51, 204) // dark blue
+    val colFlash     = Color(230, 230, 230) // light grey
+
+    implicit def color2JsAny(col: Color): js.Any = col.toString
+
 
     val txtInput = input(
       id:="txt-input",
-      tpe:="text",
       onfocus:={ (ev: dom.MouseEvent) => () },
       placeholder:="Your input here..."
     ).render
 
-    val txtOutput = textarea(id:="txt-output").render
+    val txtOutput = textarea(
+      id:="txt-output",
+//      cols:=30,
+      rows:=10,
+      readonly//,
+//      style:="resize:none"
+    ).render
 
-    def numLines = analyze.numLines(txtOutput.value)
-    def numWords = analyze.numWords(txtOutput.value)
-    def numLetters = analyze.numLetters(txtOutput.value)
+    def numLines =
+      if (txtOutput.value.isEmpty) 0
+      else txtOutput.value.count(_ == '\n') + 1
+
+    def numWords =
+      if (txtOutput.value.isEmpty) 0
+      else txtOutput.value.split("\\s+").length
+
+    def numLetters = txtOutput.value.count(!_.isWhitespace)
+
     def numChars = txtOutput.value.length
-    def freqChars = analyze.freqChars(txtOutput.value)
-    def freqWords = analyze.freqWords(txtOutput.value)
 
-    def freqCharsSortedBy(order: TableOrdering) = freqChars.toSeq.sorted(order)
+    def freqChars = {
+      val chs = txtOutput.value.toSeq.filter(!_.isWhitespace).map(_.toLower)
+      chs.foldLeft(scala.collection.mutable.Map[Char, Int]())(
+        (chFreqs, ch) => { chFreqs +=(ch -> (chFreqs.getOrElse(ch, 0) + 1)) }
+      ).toSeq
+    }
 
-    var tableOrdering: TableOrdering = CharsAsc
+    type Comparison = (Tuple2[Char, Int], Tuple2[Char, Int]) => Boolean
+    sealed trait Order { def apply: Comparison }
+    case object CharsAsc  extends Order { def apply = _._1 < _._1  }
+    case object CharsDesc extends Order { def apply = _._1 > _._1 }
+    case object FreqAsc   extends Order { def apply = _._2 < _._2 }
+    case object FreqDesc  extends Order { def apply = _._2 > _._2 }
+
+    def freqCharsSortedBy(order: Order) = freqChars.sortWith(order.apply)
+
+    var tableOrdering: Order = CharsAsc
 
     def freqCharsSorted = freqCharsSortedBy(tableOrdering)
-
-    // TODO use several Orderings a la freqCharsSorted
-    def freqWordsSorted = freqWords.toIndexedSeq.sorted
 
     val linesCount = span(0).render
     val wordsCount = span(0).render
@@ -59,24 +75,17 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
     val charsCount = span(0).render
     val lettersTotal = td(0).render
     val lettersFreq = tbody().render
-    val wordsTotal = td(0).render
-    val wordsFreq = tbody().render
 
     def autoNewline(str: String) = if (txtOutput.value.isEmpty) str else "\n" + str
 
     val theCanvas = canvas(id:="canvas-diagram").render
-    val lettersDiagram = div(
-      id:="container-letters-diagram",
-      theCanvas
-    ).render
 
     def updateCanvas() = {
       val freqs = freqCharsSortedBy(FreqDesc)
       val max = if (freqs.isEmpty) 1 else freqs.head._2
       val num = freqs.length
 
-//      val cnvContainer = dom.document.getElementById("container-letters-diagram").asInstanceOf[html.Div]
-      val cnvContainer = lettersDiagram
+      val cnvContainer = dom.document.getElementById("container-letters-diagram").asInstanceOf[html.Div]
       val canvasWidth = cnvContainer.clientWidth
       val canvasHeight = if (num <= 0) defaultCanvasHeight else cnvContainer.clientHeight - 3 // compensation for strange offset of 3px
 
@@ -98,10 +107,12 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
       ctx.textAlign = "left"
       ctx.textBaseline = "middle"
 
+
       for ((ch, fq) <- freqCharsSorted) {
         ctx.fillRect(xPos.toInt, yPos.toInt, (fq * xInc).toInt, barHeight.toInt)
         ctx.fillText(ch.toString, (xPos + fq * xInc + pad / 2).toInt, (yPos + barHeight/2).toInt)
         yPos += yInc.toInt
+        console.log("w: ", (xPos + fq * xInc + pad / 2).toInt, " fq: ", fq, " xInc: ", xInc)
       }
     }
 
@@ -113,19 +124,11 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
 
       lettersFreq.innerHTML = ""
       lettersFreq.appendChild((
-        for ((chr, freqency) <- freqCharsSorted) yield tr(
-          td(chr.toString), td(freqency)
+        for ((ch, fq) <- freqCharsSorted) yield tr(
+          td(ch.toString), td(fq)
         )
       ).render)
       lettersTotal.textContent = numLetters.toString
-
-      wordsFreq.innerHTML = ""
-      wordsFreq.appendChild((
-        for ((word, frequency) <- freqWordsSorted) yield tr(
-          td(word), td(frequency)
-        )
-      ).render)
-      wordsTotal.textContent = numWords.toString
 
       updateCanvas()
     }
@@ -149,10 +152,25 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
         txtInput.value = ""
       case _ => ()
     }
-    
-    val colorFlash = new ColorFlash(txtOutput)
 
-    val lettersTable = table(
+    var colorBackup = scala.collection.mutable.Map[String, String]()
+
+    def colorFlash(elm: html.Element, color: Color = Color("Yellow"), timeout: Double = 250): Unit = {
+      def backup = {
+        val col = elm.style.background
+        colorBackup += (elm.id -> col)
+        col
+      }
+      val originalColor = colorBackup.getOrElse(elm.id, backup)
+
+      elm.style.background = color
+      dom.setTimeout({ () =>
+        elm.style.background = originalColor
+      }, timeout)
+    }
+
+
+    val theTable = table(
       id:="tbl-letters",
       cls:="my-tbl-sortable",
       thead(
@@ -165,7 +183,7 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
           ),
           th("Frequency",
             onclick:={ () => {
-              tableOrdering = if (tableOrdering == FreqDesc) FreqAsc else FreqDesc
+              tableOrdering = if (tableOrdering == FreqAsc) FreqDesc else FreqAsc
               updateAnalysisOutput()
             } }
           )
@@ -175,34 +193,38 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
       lettersFreq
     )
 
-    val wordsTable = table(
-      id:="tbl-words",
-      cls:="my-tbl-sortable",
-      thead(
-        tr(
-          th("Word"/*,
-            onclick:={ () => {
-              tableOrdering = if (tableOrdering == CharsAsc) CharsDesc else CharsAsc
-              updateAnalysisOutput()
-            } }*/
-          ),
-          th("Frequency"/*,
-            onclick:={ () => {
-              tableOrdering = if (tableOrdering == FreqDesc) FreqAsc else FreqDesc
-              updateAnalysisOutput()
-            } }*/
-          )
-        )
-      ),
-      tfoot(tr(td("total"), wordsTotal)),
-      wordsFreq
-    )
+
+//    val exampleMap = Map(
+//      "Alice" -> "Alaska",
+//      "Bob" -> "Brunei",
+//      "Carla" -> "Costa Rica"
+//    )
+
 
     container.appendChild(
-      div(
-        id:="container-toplevel",
+      div(id:="container-toplevel",
+        div(
+          button(
+            id:="btn-foo",
+//            `class`:="btn",
+            cls:="my-btn",
+            "Foo",
+            onclick:={ (ev: dom.MouseEvent) => { console.log("foo clicked!", ev)} }
+          ),
+          input(
+            id:="btn-bar",
+            cls:="my-btn",
+//            `type`:="button",
+            tpe:="button",
+            value:="Bar",
+            onclick:={ () => {
+              println("bar clicked!!!")
+              dom.alert("foo")
+            } }
+          )
+        ),
 
-        h1("A Simple Text Analyzer"),
+        hr,
 
         div(
           id:="container-input",
@@ -227,8 +249,7 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
             "Clear",
             onclick:={ () => {
               clearOutput
-//              colorFlash(txtOutput, colFlash)
-              colorFlash.flash(colColorFlash)
+              colorFlash(txtOutput, colFlash)
             } }
           )
         ),
@@ -236,34 +257,34 @@ object Showcase7InteractiveTextAnalyzer extends Showcase {
         div(
           id:="container-analysis",
           div(id:="container-anaylsis-text",
-            table(id:="tbl-text",
-              tbody(
-                tr(
-                  th("lines:"), td(linesCount),
-                  th("words:"), td(wordsCount),
-                  th("letters:"), td(lettersCount),
-                  th("characters:"), td(charsCount)
-                )
-              )
-            )
+            p("lines: ", linesCount),
+            p("words: ", wordsCount),
+            p("letters: ", lettersCount),
+            p("characters: ", charsCount)
           ),
+
           div(
             id:="container-analysis-letters",
-            lettersTable,
-            lettersDiagram
-//            div(
-//              id:="container-letters-diagram",
-//              theCanvas
-//            )
-          ),
-          div(
-            id:="container-analysis-words",
-            wordsTable
+            theTable,
+            div(
+              id:="container-letters-diagram",
+              theCanvas
+            )
           )
         )
+
+//        ,
+//        hr,
+//
+//        div(
+//          id:="list-example",
+//          ul(
+//            (for {(name, destination) <- exampleMap} yield li(
+//              b(name), s" wants to travel to $destination"
+//            )).toSeq
+//          )
+//        )
       ).render
     )
   }
-
-
 }

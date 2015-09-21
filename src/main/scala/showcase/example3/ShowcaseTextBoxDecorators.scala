@@ -1,8 +1,8 @@
-package showcase.example2
+package showcase.example3
 
-import scala.util.Random
 import org.scalajs.dom
 import org.scalajs.dom.{console, html}
+import scala.util.Random
 import scalatags.JsDom.all._
 
 import htmlib.ConvenientDiv._
@@ -10,16 +10,39 @@ import htmlib.DomUtil._
 import showcase.Showcase
 
 
-/* Note on the htmllib: as an altvernative to importing all members of the object, the trait can be extended or with-ed like this: */
-//import lib.html._
-//object Showcase1TextBoxes extends Showcase with ConvenientDiv with DomUtil {
-object Showcase2DragAndDrop extends Showcase {
+// TODO this is still not pretty on the screen, but shows how a decorator pattern could be used
+
+object ShowcaseTextBoxDecorators extends Showcase {
   def setupUi(container: html.Element): Unit = {
+    val am = DDiv(
+      DDiv(background:="green"),
+      fontFamily:="Arial"
+    )("Awe-some!!")
+
+    val bd1 = DDiv(
+      background:="#F0F0F0",
+      borderRadius:=5.px,
+      padding:="0.5% 3%",   // top/bottom right/left
+      margin:="1.0em 0.0em" // top/bottom right/left
+    )
+    val bd2 = DDiv(fontSize:=3.em)
+    val bd3 = DDiv(bd1, fontSize:=3.em)
+
     container.appendChild(
       div(
         maxWidth:=1000.px,
         margin:="auto",
-        h1("Scala.js Showcase 2"),
+        h1("Scala.js Showcase 3"),
+        div(
+          am,
+          DDiv(
+            DDiv(background:="green"),
+            fontFamily:="Arial"
+          )("G-reat!!"),
+          bd1.apply("Exactly!!!"),
+          bd2.apply("Exactly!!!"),
+          bd3.apply("Exactly!!!")
+        ),
         div(
           invisibleBox(
             draggableBox("d1")(
@@ -63,8 +86,7 @@ object Showcase2DragAndDrop extends Showcase {
     ondragover:=allowDrop
   )(xs)
 
-  def allowDrop: (dom.DragEvent => Unit) = evt =>
-    evt.preventDefault()
+  def allowDrop: (dom.DragEvent => Unit) = evt => evt.preventDefault()
 
   def drag: (dom.DragEvent => Unit) = evt => evt.target match {
     case targetDiv: html.Div =>

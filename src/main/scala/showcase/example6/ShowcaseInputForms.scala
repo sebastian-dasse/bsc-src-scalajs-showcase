@@ -10,11 +10,11 @@ import showcase.Showcase
 
 // TODO: some form examples, a pseudo-login ...
 
-object Showcase6InputForms extends Showcase {
+object ShowcaseInputForms extends Showcase {
   def setupUi(container: html.Element): Unit = {
     container.appendChild(
       div(
-        h1("Scala.js Showcase 4"),
+        h1("Scala.js Showcase 6"),
 
         nav(
           button(

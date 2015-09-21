@@ -19,7 +19,7 @@ import scalatags.JsDom.tags2._
 import showcase.Showcase
 
 
-object Showcase4Layout extends Showcase {
+object ShowcaseLayout extends Showcase {
   def setupUi(container: sjs_html.Element): Unit = {
 
     val theImg = img(*.src:="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/ArenariaMelanocephala_3864.jpg/318px-ArenariaMelanocephala_3864.jpg").render

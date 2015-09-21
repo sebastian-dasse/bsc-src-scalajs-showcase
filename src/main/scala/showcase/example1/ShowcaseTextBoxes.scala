@@ -10,8 +10,8 @@ import showcase.Showcase
 
 /* Note on the htmllib: as an altvernative to importing all members of the object, the trait can be extended or with-ed like this: */
 //import lib.html._
-//object Showcase1TextBoxes extends Showcase with TextBox with ConvenientDiv {
-object Showcase1TextBoxes extends Showcase {
+//object ShowcaseTextBoxes extends Showcase with TextBox with ConvenientDiv {
+object ShowcaseTextBoxes extends Showcase {
   def setupUi(container: html.Element): Unit = {
     container.appendChild(
       div(

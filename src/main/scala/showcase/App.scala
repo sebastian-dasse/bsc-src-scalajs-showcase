@@ -1,7 +1,6 @@
 package showcase
 
 import org.scalajs.dom.html
-import showcase.example7.Showcase7InteractiveTextAnalyzer
 import scalajs.js.annotation.JSExport
 
 import htmlib.DomUtil._
@@ -53,14 +52,15 @@ object App {
     // - extract lib functions etc.
     // - add central navigation to the several showcases as sub-pages
 
-//    Showcase1TextBoxes(container)
-//    Showcase2DragAndDrop(container) // TODO use a proper data model
-//    Showcase3TextBoxDecorators(container)
-//    Showcase4Layout(container)
-//    Showcase5Layout(container) // TODO continue here -> clean up, extract methods out of setupUi
-//    Showcase6InputForms(container) // TODO add login example and bigger form, maybe
-    Showcase7InteractiveTextAnalyzer(container) // could be extended and improved (see below)
-//    Showcase8Ajax(container) // not implemented
+//    example0.ShowcaseCanvas(container)
+//    example1.ShowcaseTextBoxes(container)
+//    example2.ShowcaseDragAndDrop(container) // TODO use a proper data model
+//    example3.ShowcaseTextBoxDecorators(container)
+//    example4.ShowcaseLayout(container)
+//    example5.ShowcaseLayout(container)
+//    example6.ShowcaseInputForms(container) // TODO add login example and bigger form, maybe
+    example7.ShowcaseInteractiveTextAnalyzer(container) // could be extended and improved (see below)
+//    example8.ShowcaseAjax(container) // not implemented
 
     /* TODO
      * - use the canvas frenzy-example -> playground

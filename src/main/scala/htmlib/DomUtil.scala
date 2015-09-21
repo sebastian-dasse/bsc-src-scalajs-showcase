@@ -1,5 +1,6 @@
 package htmlib
 
+import org.scalajs.dom
 import org.scalajs.dom.{document, html}
 import scala.annotation.tailrec
 import scalatags.JsDom.TypedTag
@@ -11,7 +12,7 @@ object DomUtil extends DomUtil
 trait DomUtil {
 
   /**
-   * Returns the element with the id 'container' or, if no element with this
+   * Returns the `&lt;div&gt;` with the id 'container' or, if no element with this
    * name exists, creates a `&lt;div&gt;` with this id and returns it.
    */
   def getContainer(theId: String = "container"): html.Div = {
@@ -23,41 +24,41 @@ trait DomUtil {
 //----------------------------------------------------------
 
   /// 1. imperative version - the opposite of elegant
-  /*def replaceChild(tgtContainer: html.Div, newElmId: String): Unit = {
+  /*def replaceChild[N <: dom.Node](container: N, newElmId: String): Unit = {
     val droppedElm = document.getElementById(newElmId)
     if (droppedElm != null) {
       val srcContainer = droppedElm.parentNode
-      if (tgtContainer.hasChildNodes) {
-        val droppedOnElm = tgtContainer.firstElementChild
+      if (container.hasChildNodes) {
+        val droppedOnElm = container.firstElementChild
         srcContainer.appendChild(droppedOnElm)
       }
-      tgtContainer.appendChild(droppedElm)
+      container.appendChild(droppedElm)
     }
   }*/
 
   /*/// 2. naive version using Options - quite similar
-  def replaceChild(tgtContainer: html.Div, newElmId: String): Unit = {
+  def replaceChild[N <: dom.Node](container: N, newElmId: String): Unit = {
     val droppedElm = Option(document.getElementById(newElmId))
     if (droppedElm.isDefined) {
       val srcContainer = droppedElm.get.parentNode
-      val droppedOnElm = Option(tgtContainer.firstElementChild)
+      val droppedOnElm = Option(container.firstElementChild)
       if (droppedOnElm.isDefined) {
         srcContainer.appendChild(droppedOnElm.get)
       }
-      tgtContainer.appendChild(droppedElm.get)
+      container.appendChild(droppedElm.get)
     }
   }*/
 
   /// 3. functional version using for comprehension - very readable
-  /** Replaces the first child element of the target container with the specified element. */
-  def replaceChild(tgtContainer: html.Element, newElmId: String): Unit =
+  /** Replaces the first child of the target container with the specified element. */
+  def replaceChild[N <: dom.Node](container: N, newElmId: String): Unit =
     for {
       droppedElm <- Option(document.getElementById(newElmId))
       srcContainer = droppedElm.parentNode
-      droppedOnElm = Option(tgtContainer.firstElementChild)
+      droppedOnElm = Option(container.firstChild)
     } yield {
       droppedOnElm.foreach(srcContainer.appendChild)
-      tgtContainer.appendChild(droppedElm)
+      container.appendChild(droppedElm)
     }
 
   /*/// 4. strictly functional version - very concise but harder to read
@@ -70,22 +71,23 @@ trait DomUtil {
 
   //----------------------------------------------------------
 
-  /** Replaces all child elements of the target container with the specified element. */
-//  def replaceChildren(cont: html.Element, repl: html.Element): Unit = {
-  def replaceChildren(cont: html.Element, repl: html.Element): Unit = {
-    val parent = cont.parentElement
-//    while (Option(cont.firstElementChild) != None) {
-//      cont.removeChild(cont.firstElementChild)
-//    }
-    @tailrec def loop(): Unit = Option(cont.firstElementChild) match {
+  /** Replaces all children of the target container with the specified element. */
+  def replaceChildrenWithElm[N <: dom.Node](container: N, newElm: N): Unit = {
+    @tailrec def removeChildren(): Unit = Option(container.firstChild) match {
       case Some(child) =>
-        cont.removeChild(child)
-        loop()
+        container.removeChild(child)
+        removeChildren()
       case None => ()
     }
-    loop()
-    cont.appendChild(repl)
+    removeChildren()
+    container.appendChild(newElm)
   }
+
+  //----------------------------------------------------------
+
+  /** Replaces all children of the target container with the specified elements. */
+  def replaceChildren[N <: dom.Node](container: N)(newElms: TypedTag[html.Element]*): Unit =
+    replaceChildrenWithElm(container, newElms.render.asInstanceOf[html.Element])
 
   //----------------------------------------------------------
 }
