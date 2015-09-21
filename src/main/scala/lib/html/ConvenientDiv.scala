@@ -19,7 +19,7 @@ object ConvenientDiv extends ConvenientDiv
  */
 trait ConvenientDiv {
 
-  def box[S <: Modifier](styles: S*)(contents: Modifier*): TypedTag[html.Div] = div(
+  def box[S <: Modifier](styles: S*)(contents: Modifier*): HtmlTag /*TypedTag[html.Div]*/ = div(
     background:=ColorLightGrey,
     borderRadius:=BorderRadiusDefault,
 //    padding:=Seq(0.5.em, 1.5.em).mkString(" "),
@@ -32,7 +32,7 @@ trait ConvenientDiv {
 
   private[html] trait DivBase {
     protected[html] def stylez: Seq[Modifier]
-    def apply(contents: Modifier*): TypedTag[html.Div] = div(stylez, contents)
+    def apply(contents: Modifier*): HtmlTag /*TypedTag[html.Div]*/ = div(stylez, contents)
   }
 
   private[html] class DivDecorator(decorated: DivBase, styles: Modifier*) extends DivBase {

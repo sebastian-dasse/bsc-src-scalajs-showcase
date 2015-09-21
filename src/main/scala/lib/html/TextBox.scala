@@ -19,18 +19,18 @@ object TextBox extends TextBox
  * - (Available via `extends` or `with`).
  */
 trait TextBox {
-  def importantBox(xs: Modifier*): TypedTag[html.Div] = box(
+  def importantBox(xs: Modifier*): HtmlTag /*TypedTag[html.Div]*/ = box(
     border:="solid 2px red", // style width color
     fontSize:=1.25.em
   )(xs)
 
-  def greenBox(xs: Modifier*): TypedTag[html.Div] = box(
+  def greenBox(xs: Modifier*): HtmlTag /*TypedTag[html.Div]*/ = box(
     background:="#00F0F0",
     border:="solid 2px green", // style width color
     fontSize:="small"
   )(xs)
 
-  def codeBox(xs: Modifier*): TypedTag[html.Pre] = pre(
+  def codeBox(xs: Modifier*): HtmlTag /*TypedTag[html.Pre]*/ = pre(
     background:=ColorLightGrey,
     border:=BorderCode,
     borderRadius:=5.px,
@@ -38,7 +38,7 @@ trait TextBox {
     code( xs )
   )
 
-  def codeInline(xs: Modifier*): TypedTag[html.Element] = code(
+  def codeInline(xs: Modifier*): HtmlTag /*TypedTag[html.Element]*/ = code(
     background:=ColorLightGrey,
     border:=BorderCode,
     borderRadius:=BorderRadiusDefault,
