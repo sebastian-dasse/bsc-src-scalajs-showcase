@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "org.scala-js" %%% "scalajs-dom" % "0.8.0",
   "be.doeraene" %%% "scalajs-jquery" % "0.8.0",
   "com.lihaoyi" %%% "scalatags" % "0.5.2",
+//  "com.lihaoyi" %%% "upickle" % "0.3.4",
   "com.lihaoyi" %%% "utest" % "0.3.1" % "test"
 )
 

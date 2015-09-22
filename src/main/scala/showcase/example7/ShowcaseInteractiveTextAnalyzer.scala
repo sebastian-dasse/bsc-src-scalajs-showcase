@@ -3,7 +3,6 @@ package showcase.example7
 import org.scalajs.dom
 import org.scalajs.dom.ext.{Color, KeyCode}
 import org.scalajs.dom.{console, html}
-
 import scala.scalajs.js
 import scalatags.JsDom.all._
 
@@ -208,7 +207,7 @@ object ShowcaseInteractiveTextAnalyzer extends Showcase {
           txtInput,
           div(
             id:="container-btns",
-              button(
+            button(
               id:="btn-enter",
               cls:="input-btn",
               "Enter",
