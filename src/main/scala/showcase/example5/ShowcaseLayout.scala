@@ -36,7 +36,7 @@ object ShowcaseLayout extends Showcase {
       MyImage(
         "Fourth",
         img(src:="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Black_Turnstone_%28Arenaria_melanocephala%29.jpg/320px-Black_Turnstone_%28Arenaria_melanocephala%29.jpg"),
-        "piff paff puff"
+        "ping paang pong"
       )
     )
 

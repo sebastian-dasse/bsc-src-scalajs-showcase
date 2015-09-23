@@ -61,6 +61,7 @@ object App {
 //    example6.ShowcaseInputForms(container) // TODO add login example and bigger form, maybe
 //    example7.ShowcaseInteractiveTextAnalyzer(container) // could be extended and improved (see below)
     example8.ShowcaseAjax(container) // not implemented
+//    example8.ShowcaseAjaxObserver(container) // not implemented
 
     /* TODO
      * - use the canvas frenzy-example -> playground

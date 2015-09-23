@@ -3,6 +3,7 @@ package showcase.example7
 import org.scalajs.dom
 import org.scalajs.dom.ext.{Color, KeyCode}
 import org.scalajs.dom.{console, html}
+
 import scala.scalajs.js
 import scalatags.JsDom.all._
 
@@ -36,7 +37,7 @@ object ShowcaseInteractiveTextAnalyzer extends Showcase {
       placeholder:="Your input here..."
     ).render
 
-    val txtOutput = textarea(id:="txt-output").render
+    val txtOutput = textarea(id:="txt-output", disabled).render
 
     var theText = new AnalyzableString(txtOutput.value)
 
