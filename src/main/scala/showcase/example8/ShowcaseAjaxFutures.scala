@@ -4,15 +4,24 @@ import scala.collection.SortedMap
 import org.scalajs.dom
 import org.scalajs.dom.{console, html}
 import scala.scalajs.js
-import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom.ext.{Ajax, KeyCode}
+
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
+import scala.async.Async.{async, await} /* seems not to work well with the workbench */
+
+//import scala.util.Try
 import scalatags.JsDom.all._
+//import scalatags.JsDom.TypedTag
+//import upickle.default._
 
 import showcase.Showcase
 
 /*
- * see: http://lihaoyi.github.io/hands-on-scala-js/#UsingWebServices
+ * see:
+ * - http://lihaoyi.github.io/hands-on-scala-js/#UsingWebServices
+ * - http://lihaoyi.github.io/hands-on-scala-js/#dom.extensions
  */
-object ShowcaseAjax extends Showcase {
+object ShowcaseAjaxFutures extends Showcase {
 
   object Converter {
     val currencies: SortedMap[String, String] = SortedMap(
@@ -53,7 +62,7 @@ object ShowcaseAjax extends Showcase {
       "ZAR" -> "South African Rand"
     )
   }
-  class Converter(
+  case class Converter(
     var srcCurr: String = "EUR",
     var dstCurr: String = "EUR",
     var srcAmount: Double = 1.0,
@@ -67,10 +76,6 @@ object ShowcaseAjax extends Showcase {
 
   def toDouble(str: String): Double =
     Numeric.findFirstIn(str).getOrElse("0").replaceAll(",", ".").toDouble
-
-  /// not available for Scala.js
-//  private val formatter = java.text.NumberFormat.getInstance()
-//  def formatCurr(d: Double): String = formatter.format(d)
 
   // TODO format like that: "1.000.000,0000 EUR"
   def formatCurr(d: Double): String = "%.4f".format(d)
@@ -93,8 +98,6 @@ object ShowcaseAjax extends Showcase {
       evt.preventDefault()
     }
 
-//    val outputAmount = textarea(
-//    val outputAmount = input(
     val outputAmount = div(
       id:="out-dst-amount",
       disabled,
@@ -102,36 +105,35 @@ object ShowcaseAjax extends Showcase {
     ).render
 
 
-    def updateConversionRate(): Unit = {
+    /// version 1: with futures - org.scalajs.dom.ext.Ajax
+    /*def updateConversionRate(): Unit = {
+      val url = "http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in ('" +
+          converter.srcCurr + converter.dstCurr + "')&format=json&env=store://datatables.org/alltableswithkeys"
+
+      val f = Ajax.get(url)
+      f.onSuccess{ case xhr =>
+        val json: js.Dynamic = js.JSON.parse(xhr.responseText)
+        assert(json.query.results.rate.id.toString == converter.srcCurr + converter.dstCurr)
+        converter.rate = json.query.results.rate.Rate.toString.toDouble
+        outputAmount.textContent = formatCurr(converter.dstAmount)
+      }
+      f.onFailure{ case exc => console.error(exc.toString) }
+    }*/
+
+
+    /// version 2: with async await - org.scalajs.dom.ext.Ajax and scala.async.Async.{async, await}
+    def updateConversionRate(): Unit = async{
       val url = "http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in ('" +
         converter.srcCurr + converter.dstCurr + "')&format=json&env=store://datatables.org/alltableswithkeys"
 
-      val xhr = new dom.XMLHttpRequest()
-      xhr.open("GET", url)
-      xhr.onload = (e: dom.Event) => {
-        if (xhr.status == 200) try {  // Try { ... } ?
-          val json: js.Dynamic = js.JSON.parse(xhr.responseText) // xhr.responseText could be null
-//          val json: js.Dynamic = js.JSON.parse(null) // provoke exception
-
-          /// nice: could use the JavaScript console.assert() method - but might not be that important in this very case
-//          console.assert(
-//            json.query.results.rate.id == srcCurr + dstCurr,
-//            "the rate id of the API did not match your currency combination",
-//            json.query.results.rate.id, s"$srcCurr$dstCurr"
-//          )
-          assert(json.query.results.rate.id.toString == converter.srcCurr + converter.dstCurr)
-
-//          val rate = json.query.results.rate.Rate.asInstanceOf[String].toDouble
-//          setOutputAmount(srcAmnt * rate)
-          converter.rate = json.query.results.rate.Rate.toString.toDouble
-          outputAmount.textContent = formatCurr(converter.dstAmount)
-        } catch {
-          case exc: Throwable => console.error(exc.toString)
-        }
-      }
-      xhr.send()
-      console.info(xhr)
+      val xhr = await{ Ajax.get(url) }
+      val json: js.Dynamic = js.JSON.parse(xhr.responseText)
+      assert(json.query.results.rate.id.toString == converter.srcCurr + converter.dstCurr)
+      converter.rate = json.query.results.rate.Rate.toString.toDouble
+      outputAmount.textContent = formatCurr(converter.dstAmount)
     }
+
+
 
     inputAmount.onkeyup = (evt: dom.KeyboardEvent) => evt.keyCode match {
       case KeyCode.enter => {
@@ -150,26 +152,6 @@ object ShowcaseAjax extends Showcase {
       inputAmount.value = formatCurr(converter.srcAmount)
     }
 
-
-    /// version 1: a Seq of tuples works straight ahead with the for-yield-syntax, to generate a Seq of Scalatags tags
-//    val currencies: Seq[(String, String)] = Seq(
-//      ("EUR", "Euro"),
-//      ("USD", "US Dollar")
-//    )
-//    val tagSeq: Seq[TypedTag[html.Option]] = for ((code, name) <- currencies) yield option(
-//      code
-//    )
-
-    /// version 2: when using a Map, it needs to be converted to a Seq, to get the for-yield-syntax to generate a Seq of Scalatags tags
-//    val currencies: Map[String, String] = Map(
-//      "EUR" -> "Euro",
-//      "USD" -> "US Dollar"
-//    )
-//    val tagSeq: Seq[TypedTag[html.Option]] = for ((code, name) <- currencies.toSeq) yield option(
-//      code  //                                                               =====
-//    )
-
-
     def setupCurrencySelect(theId: String, callback: String => Unit, defaultOption: String = "EUR"): html.Select = {
       val sel = select(
         id:=theId,
@@ -177,14 +159,13 @@ object ShowcaseAjax extends Showcase {
           id:=s"$theId-opt-${code.toLowerCase}",
           value:=code, name
         )
-//        ,onchange:={ () => callback(sel.value) } // does not work: sel.value can not be referenced before the select was rendered
       ).render
       sel.onchange = (e: dom.Event) => callback(sel.value)
       sel.value = defaultOption
       sel
     }
 
-    val selSrcCurr = setupCurrencySelect("sel-src-curr", (c: String) => converter.srcCurr = c)
+    val selSrcCurr = setupCurrencySelect("sel-src-curr", (c: String) => converter.srcCurr = c) // TODO geht das noch besser
     val selDstCurr = setupCurrencySelect("sel-dst-curr", (c: String) => converter.dstCurr = c)
 
     container.appendChild(
@@ -194,14 +175,14 @@ object ShowcaseAjax extends Showcase {
           id:="form-conv",
           onsubmit:={ (evt: dom.Event) => evt.preventDefault() },
           inputAmount,
-          selSrcCurr,
-          outputAmount,
-          selDstCurr,
-          button(
-            id:="btn-do-get",
-            cls:="input-btn",
-            "Convert",
-            onclick:={ () => updateConversionRate() }
+            selSrcCurr,
+            outputAmount,
+            selDstCurr,
+            button(
+              id:="btn-do-get",
+              cls:="input-btn",
+              "Convert",
+              onclick:={ () => updateConversionRate() }
           )
         )
       ).render
