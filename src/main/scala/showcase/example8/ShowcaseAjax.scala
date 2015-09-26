@@ -97,8 +97,8 @@ object ShowcaseAjax extends Showcase {
 
     def updateDstAmount(): Unit = {
 //    updateConversionRate1()
-//      updateConversionRate2()
-      updateConversionRate3()
+      updateConversionRate2()
+//      updateConversionRate3()
     }
 
 
@@ -118,11 +118,11 @@ object ShowcaseAjax extends Showcase {
     }
 
     /// version 2: with futures - org.scalajs.dom.ext.Ajax
-    def updateConversionRate2(): Unit = Ajax.get(url).onSuccess{ case xhr =>
-      handleXhrResponse(xhr)
+    def updateConversionRate2(): Unit = Ajax.get(url).onSuccess{
+      case xhr => handleXhrResponse(xhr)
     }
 
-    /// version 3: with async await - org.scalajs.dom.ext.Ajax and scala.async.Async.{async, await}
+    /// version 3: with async-await - org.scalajs.dom.ext.Ajax and scala.async.Async.{async, await}
     ///   this way one can write imperative style for a asynchronous control flow
     def updateConversionRate3(): Unit = async{
       val xhr = await{ Ajax.get(url) }

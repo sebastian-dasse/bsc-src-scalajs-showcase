@@ -5,7 +5,7 @@ import org.scalajs.dom.html
 import org.scalajs.dom.ext.KeyCode
 import scalatags.JsDom.all._
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
-import scala.async.Async.{async, await}
+
 
 import showcase.Showcase
 import Utils._
@@ -44,10 +44,17 @@ object ShowcaseAjax2 extends Showcase {
     def srcAmount = inputAmount.value.asDouble
     def updateSrcAmount(d: Double) = inputAmount.value = format(d)
 
-    def updateDstAmount(): Unit = async {
-      val dstAmount = await{ converter.convert(srcAmount) }
-      outputAmount.textContent = format( dstAmount )
+    /// version 1: with futures
+    def updateDstAmount(): Unit = converter.convert(srcAmount).onSuccess{
+      case dstAmount => outputAmount.textContent = format(dstAmount)
     }
+
+    /// alternative 2: with async-await
+//    import scala.async.Async.{async, await}
+//    def updateDstAmount(): Unit = async {
+//      val dstAmount = await{ converter.convert(srcAmount) }
+//      outputAmount.textContent = format(dstAmount)
+//    }
 
     inputAmount.onkeyup = (evt: dom.KeyboardEvent) => evt.keyCode match {
       case KeyCode.enter => {
