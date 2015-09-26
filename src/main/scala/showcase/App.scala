@@ -60,20 +60,20 @@ object App {
 //    example5.ShowcaseLayout(container)
 //    example6.ShowcaseInputForms(container) // TODO add login example and bigger form, maybe
 //    example7.ShowcaseInteractiveTextAnalyzer(container) // could be extended and improved (see below)
-//    example8.ShowcaseAjax(container) // not implemented
-    example8.ShowcaseAjaxFutures(container) // not implemented
+//    example8.ShowcaseAjax(container)
+    example8.ShowcaseAjax2(container)
 
     /* TODO
-     * - use the canvas frenzy-example -> playground
-     * - login UI and a more complex form
-     * - a simple blog
-     * - maybe inheritance
      * - autocomplete
+     * - autocomplete, with Rx
+     * 1. use the canvas frenzy-example -> playground
+     * 2. login UI and a more complex form
+     * 3. a simple blog
+     * - maybe inheritance
      * - an advanced drag-and-drop-example -> maybe a blog
      *   - with a data model for the containers
      *   - with nice containers like in Showcase6InputForms
-     * - autocomplete, with Rx
-     * - AJAX, with Futures, Async  -->  WeatherSearch, as in Hands-on Scala.js, or if possible finance API for currency conversion
+     * x AJAX, with Futures, Async  -->  WeatherSearch, as in Hands-on Scala.js, or if possible finance API for currency conversion
      * - JavaScript-interop (in separate hello-interop project?)  -->  reuse what is already prepared in playground
      *   - export Scala.js to JavaScript
      *     - just the usual @JSExport (like used in the main, see above)
