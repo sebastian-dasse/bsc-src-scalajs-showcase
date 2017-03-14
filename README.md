@@ -12,4 +12,14 @@
 
 - Launch `sbt` and type `fullOptJS`.
 
-- Find
+- Then extract the following files:
+```
+target/scala-2.11/
+  +- scalajs-showcase-opt.js
+  +- scalajs-showcase-jsdeps.min.js
+  +- classes/
+          +- index.html
+          +- style.css
+```
+
+- Finally open the `index.html` in the browser of your choice.

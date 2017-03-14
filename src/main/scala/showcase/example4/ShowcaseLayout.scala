@@ -5,7 +5,7 @@ import org.scalajs.dom
  * would be an alternative, i.e.: scalatags.JsDom.tags2.{article, nav} */
 import org.scalajs.dom.{console, html => sjs_html}
 
-/* possibliy clutters namespace */
+/* possibly clutters namespace */
 //import scalatags.JsDom.all._
 
 /* imports almost the same as 'scalatags.JsDom.all._', but
